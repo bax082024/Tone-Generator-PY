@@ -1,19 +1,19 @@
 import numpy as np
 import sounddevice as sd
 import threading
-import keyboard  # For real-time key input
+import keyboard
 
-# Settings
-frequency = 432  # Starting frequency
+frequency = 432
 volume = 0.5
 sample_rate = 44100
-block_size = 1024
+block_size = 2048
 running = True
 
 def tone_callback(outdata, frames, time, status):
     global frequency, sample_rate
     t = (np.arange(frames) + tone_callback.phase) / sample_rate
-    wave = volume * np.sin(2 * np.pi * frequency * t)
+    wave = volume * np.sin(2 * np.pi * frequency * t).astype(np.float32)
+
     outdata[:] = wave.reshape(-1, 1)
     tone_callback.phase += frames
 
@@ -41,7 +41,6 @@ def control_frequency():
             running = False
             break
 
-# Start both threads
 tone_thread = threading.Thread(target=play_tone)
 key_thread = threading.Thread(target=control_frequency)
 
