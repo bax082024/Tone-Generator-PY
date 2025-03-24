@@ -7,4 +7,8 @@ def play_tone(frequency, duration=2, sample_rate=44100):
     sd.play(waveform, sample_rate)
     sd.wait()
 
-    
+try:
+    freq = float(input("Enter frequency in Hz (e.g., 432 or 440): "))
+    play_tone(freq)
+except ValueError:
+    print("Invalid input. Please enter a number.")
